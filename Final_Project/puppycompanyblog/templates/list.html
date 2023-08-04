@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+	<h3>USER DATA LIST</h3>
+	<table border = "2" padding="4">
+		<thead>
+			<tr>
+				<th>USER ID </th>
+				<th>USER EMAIL</th>
+				<th>USERNAME</th>
+				<th>DELETE</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for users in user %}
+				<tr>
+					<td>{{ users.id }}</td>
+					<td>{{ users.email }}</td>
+					<td>{{ users.username }}</td>
+					<td>{{ users.password_hash }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
