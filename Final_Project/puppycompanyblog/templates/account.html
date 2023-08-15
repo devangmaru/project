@@ -1,33 +1,144 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="jumbotron">
-  <div align='center'>
-    <h1 >Welcome to the page for {{current_user.username}}</h1>
-    <img align='center' src="{{ url_for('static', filename='profile_pics/' + current_user.profile_image) }}">
-    <p>{{ current_user.email }}</p>
+<section class="h-100 gradient-custom-2">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-lg-9 col-xl-7">
+        <div class="card">
+          
+          <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
+            <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
+              <img src="{{ url_for('static', filename='profile_pics/' + current_user.profile_image) }}"
+                alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
+                style="width: 150px; z-index: 1">
+
+              <button type="button" class="btn btn-outline-dark" data-mdb-ripple-color="dark" data-bs-toggle="modal" data-bs-target="#myModal" 
+                style="z-index: 1;">
+                Edit profile
+              </button>
+            </div>
+
+            <div class="ms-3" style="margin-top: 130px;">
+              <h5>{{current_user.username}}</h5>
+            </div>
+          </div>
+
+          <div class="p-4 text-black" style="background-color: #f8f9fa;">
+            <div class="d-flex justify-content-end text-center py-1">
+              
+            </div>
+          </div>
+
+          <div class="card-body p-4 text-black">
+            <div class="mb-5">
+              <p class="lead fw-normal mb-1">About</p>
+              <div class="p-4" style="background-color: #f8f9fa;">
+                <p class="font-italic mb-1"><b>UserName : </b>{{current_user.username}}</p>
+                <p class="font-italic mb-1"><b>Email : </b>{{ current_user.email }}</p>
+                <p class="font-italic mb-0"></p>
+              </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <p class="lead fw-normal mb-0">Recent Blog</p>
+            </div>
+            
+            {% for post in blog_posts.items %}
+            <section style="background-color: #e7effd;">
+              <div class="container my-5 py-5 text-dark">
+                <div class="row d-flex justify-content-center">
+                  <div class="col-md-11 col-lg-9 col-xl-7">
+                    <div class="d-flex flex-start mb-4">
+                      <img class="rounded-circle shadow-1-strong me-3"
+            src="{{ url_for('static', filename='profile_pics/' + current_user.profile_image) }}" alt="avatar" width="65"
+            height="65" />
+              <div class="card w-100">
+                <div class="card-body p-4">
+                  <div class="">
+                    <h5><a href="{{ url_for('users.user_posts', username=post.author.username) }}">{{ post.author.username }}</a></h5>
+                    <h6><a href="{{ url_for('blog_posts.blog_post', blog_post_id=post.id) }}">{{ post.title }}</a></h6>
+                      <p class="small">Published on: {{ post.date.strftime('%Y-%m-%d') }}</p>
+                        <p>
+                          {{post.text}}
+                        </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> 
+    </section>
+    {% endfor %}
+
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+              {# http://flask.pocoo.org/snippets/44/ #}
+                {% for page_num in blog_posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                    {% if blog_posts.page == page_num %}
+                    <li class="page-item disabled">
+                      <a class="page-link" href="{{ url_for('users.user_posts', username=user.username, page=page_num) }}">{{ page_num }}</a></li>
+                    </li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('users.user_posts', username=user.username, page=page_num) }}">{{ page_num }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                </nav>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- The Modal -->
+<div class="modal" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Profile</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        
+          <form  method="POST" action = "" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+          <div class="form-group">
+            {{ form.username.label(class="form-group") }}
+            {{form.username(class='form-control')  }}
+          </div>
+          <div class="form-group">
+            {{ form.email.label(class="form-group") }}
+            {{form.email(class='form-control')  }}
+          </div>
+          <div class="form-group">
+            {{ form.picture.label(class="form-group") }}
+            {{ form.picture(class="form-control-file") }}
+          </div>
+    
+          <div class="form-group">
+            {{ form.submit(class="btn btn-primary") }}
+          </div>
+          </form>
+
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
   </div>
 </div>
-<div class="container">
-  <form  method="POST" action = "" enctype="multipart/form-data">
-    {{ form.hidden_tag() }}
-    <div class="form-group">
-      {{ form.username.label(class="form-group") }}
-      {{form.username(class='form-control')  }}
-    </div
-    <div class="form-group">
-      {{ form.email.label(class="form-group") }}
-      {{form.email(class='form-control')  }}
-    </div>
-    <div class="form-group">
-      {{ form.picture.label(class="form-group") }}
-      {{ form.picture(class="form-control-file") }}
-    </div>
-    <div class="form-group">
-        {{ form.submit(class="btn btn-primary") }}
-    </div>
-  </form>
 
-</div>
 
 {% endblock content %}
