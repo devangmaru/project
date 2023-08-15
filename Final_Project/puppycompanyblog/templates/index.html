@@ -1,32 +1,44 @@
 {% extends "base.html" %}
 {% block content %}
   <div class="jumbotron">
-    <h1>Puppy Company Blog</h1>
+    <h1>Social Blogging Website</h1>
     <p>Welcome to Our Company's Blog Page</p>
   </div>
-
-  <div class="container">
 
     {# Go through each blog post #}
     {% for post in blog_posts.items %}
 
-    <div class="card mb-3" style="max-width: 540px;">
-		<div class="row g-0">
-			<div class="col-md-8">
-				<div class="card-body">
-					<h5 class="card-title"><a class="card-title" href="  {{ url_for('blog_posts.blog_post', blog_post_id=post.id) }}">{{ post.title }}</a>
-					</h5>
-					<a href="{{ url_for('users.user_posts', username=post.author.username) }}">Written By: {{ post.author.username }}</a>
-					<p class="card-text">{{ post.text[:100] }}...</p>
-					<p class="card-text"><small class="text-body-secondary">Published on: {{ post.date.strftime('%Y-%m-%d') }}</small></p><br>
-					<a href="{{ url_for('blog_posts.blog_post', blog_post_id=post.id) }}" class="btn btn-primary">Read Blog Post</a>
-				</div>
-			</div>
-		</div>
-	</div>
-
-   {% endfor %}
-
+  <section style="background-color: #e7effd;">
+  <div class="container my-5 py-5 text-dark">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-11 col-lg-9 col-xl-7">
+        <div class="d-flex flex-start mb-4">
+          <img class="rounded-circle shadow-1-strong me-3"
+            src="{{ url_for('static', filename='profile_pics/' + post.author.profile_image) }}" alt="User's Logo" width="65"
+            height="65" />
+            <div class="card w-100">
+              <div class="card-body p-4">
+                <div class="">
+                  <h5><a href="{{ url_for('users.user_posts', username=post.author.username) }}">{{ post.author.username }}</a></h5>
+                    <p class="small">Published on: {{ post.date.strftime('%Y-%m-%d') }}</p>
+                    <p>
+                      {{ post.text[:100] }}...
+                    </p>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                          <a href="{{ url_for('blog_posts.blog_post', blog_post_id=post.id) }}" class="btn btn-primary">Read Blog Post</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      {% endfor %}
+					 
    <nav aria-label="Page navigation example">
      <ul class="pagination justify-content-center">
        {% for page_num in blog_posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
