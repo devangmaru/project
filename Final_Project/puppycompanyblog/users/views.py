@@ -1,4 +1,4 @@
-from flask import render_template, url_for, flash, redirect, request, Blueprint
+from flask import render_template, url_for, flash, redirect, request, Blueprint,jsonify
 from flask_login import login_user, current_user, logout_user, login_required
 from puppycompanyblog import db
 from sqlalchemy.exc import IntegrityError
@@ -97,7 +97,12 @@ def account():
         form.email.data = current_user.email
 
     profile_image = url_for('static', filename='profile_pics/' + current_user.profile_image)
-    return render_template('account.html', profile_image=profile_image, form=form)
+    user = current_user
+    page = request.args.get('page', 1, type=int)
+    blog_posts = BlogPost.query.filter_by(user_id=current_user.id).order_by(BlogPost.date.desc()).paginate(page=page, per_page=5)
+
+    return render_template('account.html', user=user, profile_image=profile_image, blog_posts=blog_posts, form=form)
+
 
 
 @users.route("/<username>")
@@ -110,6 +115,32 @@ def user_posts(username):
  
 @users.route('/list')
 def listall():
-	return render_template('list.html',user= User.query.all())
+    return render_template('list.html',user= User.query.all())
+
+@users.route('/delete_user/<int:user_id>',methods=['DELETE'])
+def delete_user(user_id):
+    try:
+        # Fetch the user by ID
+        user = User.query.get(user_id)
+
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+
+        # Disassociate all blog posts from this user
+        for post in user.posts:
+            post.user_id = None
+
+        # Delete the user
+        db.session.delete(user)
+        db.session.commit()
+
+        return jsonify({"message": "User deleted successfully"}), 200
+    except IntegrityError as e:
+        print("IntegrityError:", e)
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+    
+
  
  
