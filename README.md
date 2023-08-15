@@ -3,11 +3,13 @@ social blogging web application
 
 THIS PHOTO IS HOME PAGE 
 
-![Screenshot 2023-08-04 184123](https://github.com/devangmaru/project/assets/133796777/d49d10dd-2bdb-45e9-8c93-c7676f7b3d5d)
+![Screenshot 2023-08-15 135312](https://github.com/devangmaru/project/assets/133796777/729f6056-66de-4d33-bcfc-5a334c311a03)
+
 
 THIS PHOTO IS ACCOUNT SHOW 
 
-![Screenshot 2023-08-04 184227](https://github.com/devangmaru/project/assets/133796777/daba6498-be7b-401d-bf0e-eda88ec603fb)
+![Screenshot 2023-08-15 135259](https://github.com/devangmaru/project/assets/133796777/4529e8dd-c6f5-40bc-bd6f-a1bca8d521a6)
+
 
 THIS PHOTO IS REGISTER PAGE
 
